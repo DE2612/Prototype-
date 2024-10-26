@@ -1,0 +1,55 @@
+.rectangle-1 {
+    -fx-pref-width: 1366px;               /* Preferred width */
+    -fx-pref-height: 104px;              /* Preferred height */
+    -fx-padding: 8px;                    /* Padding (top, right, bottom, left) */
+	-fx-fill: #BF0046;              /* Fill color */
+	-fx-stroke: #BF0046;        /* Border color */
+	-fx-stroke-width: 1;           /* Border width */
+}
+
+.background {
+	-fx-background-color: #FFEEB7;
+}
+
+.sun-devil-book-exchange {
+    -fx-pref-width: 900px;          /* Preferred width */
+    -fx-pref-height: 130px;         /* Preferred height */
+    -fx-text-fill: #FFEAA6;         /* Text color */
+    -fx-font-family: "Alumni Sans"; /* Font family */
+    -fx-font-weight: bold;          /* Font weight */
+    -fx-font-size: 60px;            /* Font size */
+    -fx-line-spacing: 0;            /* Line height adjustment */
+    -fx-text-alignment: center;     /* Text alignment */
+}
+
+.welcome-name- {
+    -fx-pref-width: 900px;          /* Preferred width */
+    -fx-pref-height: 60px;          /* Preferred height */
+    -fx-text-fill: #BF0046;         /* Text color */
+    -fx-font-family: "Alumni Sans"; /* Font family */
+    -fx-font-weight: bold;          /* Font weight */
+    -fx-font-size: 40px;            /* Font size */
+    -fx-line-spacing: 0;            /* Line height adjustment */
+    -fx-text-alignment: left;       /* Text alignment */
+}
+
+.log_out_btn {
+	-fx-spacing: 15;
+    -fx-pref-width: 150px;           /* Preferred width */
+    -fx-pref-height: 30px;           /* Preferred height */
+    -fx-padding: 0 10 0 10;          /* Padding: top right bottom left */
+    -fx-background-color: #BF0046;   /* Background color */
+    -fx-text-fill: #FFFFFF;          /* Text color */
+    -fx-border-color: transparent;       /* Border color */
+    -fx-border-width: 1px;           /* Border width */
+    -fx-border-style: solid;          /* Border style */
+    -fx-background-radius: 9px;      /* Corner radius */
+    -fx-font-family: "Inter";        /* Font family */
+    -fx-font-weight: 600;             /* Font weight */
+    -fx-font-size: 16px;              /* Font size */
+    -fx-alignment: center;            /* Text alignment */
+}
+.log_out_btn:hover {
+	-fx-background-color: #A60038;     /* Background color on hover */
+    -fx-text-fill: #FFFFFF;            /* Text color on hover */
+}
