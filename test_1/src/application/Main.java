@@ -19,6 +19,7 @@ public class Main extends Application {
 		CycledView createAccountScene = new createAccountPage(null, null, null, null, null);
 		CycledView forgotPasswordScene = new forgotPasswordPage(null, null, null, null, null);
 		CycledView mainMenuScene = new mainMenuPage(null, null, null, null, null);
+		CycledView bookListScene = new bookListScene(null, null, null, null, null);
 		
 		loginScene.setStyle("-fx-background-color: #FFEEB7;");
 		loginScene.next1 = createAccountScene;
@@ -33,6 +34,10 @@ public class Main extends Application {
 		
 		mainMenuScene.setStyle("-fx-background-color: #FFEEB7;");
 		mainMenuScene.next1 = loginScene;
+		mainMenuScene.next2 = bookListScene; 
+
+		bookListScene.setStyle("-fx-background-color: #FFEEB7;");
+		bookListScene.next1 = loginScene;
 
 		Scene scene = new Scene(loginScene, 1366, 768);
         

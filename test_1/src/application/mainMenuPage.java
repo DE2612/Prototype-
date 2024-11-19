@@ -211,6 +211,10 @@ public class mainMenuPage extends CycledView {
 		log_out_btn.setOnAction((ActionEvent e) -> {
     		callNext1();
     	});
+
+		buy_btn.setOnAction((ActionEvent e) -> {
+			callNext2();
+		});
 		
 		// TODO Auto-generated method stub
 		
