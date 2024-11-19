@@ -31,7 +31,7 @@ public class loginPage extends CycledView {
 	
 	void read() throws IOException {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("credentials.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("test_1/credentials.txt"));
 			String first = reader.readLine();
 			int num = Integer.parseInt(first);
 			for (int i = 0; i < num; i++) {
