@@ -26,6 +26,12 @@ public abstract class CycledView extends Pane { // Choose whatever is most appro
     protected void callNext3() {
         getScene().setRoot(next3);
     }
+    protected void callNext4() {
+        getScene().setRoot(next4);
+    }
+    protected void callNext5() {
+        getScene().setRoot(next5);
+    }
 
     public CycledView next1;
     public CycledView next2;
