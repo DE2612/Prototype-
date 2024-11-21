@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.util.concurrent.locks.Condition;
 
 public class Book {
+	private int InternalIndex;
     public String ID;
     public String Title;
-    public String author;
+    public String Author;
     public String ISBN;
     public String description;
+    public String Catagory;
     public int AvailableCount;
     public ArrayList<Double> Prices;
     public ArrayList<String> Conditions;
@@ -24,20 +26,38 @@ public class Book {
         AvailableCount++;
     }
     public void SerializeBook(BufferedWriter writer) throws IOException {
-        writer.write(Integer.toString(AvailableCount));
+        writer.write(Integer.toString(AvailableCount) + "\n");
         for(int i = 0; i < AvailableCount; i++) {
-            writer.write(Double.toString(Prices.get(i)));
-            writer.write(Conditions.get(i));
-            if(Conditions.get(i).equals("LikeNew")) HasLikeNew = true;
-            else if(Conditions.get(i).equals("ModeratelyUsed")) HasModeratelyUsed = true;
-            else if(Conditions.get(i).equals("HeavilyUsed")) HasHeavilyUsed = true;
+            writer.write(Double.toString(Prices.get(i)) + "\n");
+            writer.write(Conditions.get(i) + "\n");
+            if(Conditions.get(i).equals("Used Like New")) HasLikeNew = true;
+            else if(Conditions.get(i).equals("Moderately Used")) HasModeratelyUsed = true;
+            else if(Conditions.get(i).equals("Heavily Used")) HasHeavilyUsed = true;
         }
-        writer.write(Boolean.toString(HasLikeNew));
-        writer.write(Boolean.toString(HasModeratelyUsed));
-        writer.write(Boolean.toString(HasHeavilyUsed));
-        writer.write(Boolean.toString(AvailableCount != 0));
+        writer.write(Boolean.toString(HasLikeNew) + "\n");
+        writer.write(Boolean.toString(HasModeratelyUsed) + "\n");
+        writer.write(Boolean.toString(HasHeavilyUsed) + "\n");
+        writer.write(Boolean.toString(AvailableCount != 0) + "\n");
     }
-    public void Book() {
+    public void SetIndex(int Index) {
+    	InternalIndex = Index;
+    }
+    public int GetIndex() {
+    	return InternalIndex;
+    }
+    Book() {
+    	InternalIndex = 0;
+    	AvailableCount = 0;
+    	ID = "A";
+    	Title = "B";
+    	Author = "C";
+    	ISBN = "D";
+    	description = "E";
+    	Catagory = "F";
+    	HasLikeNew = false;
+    	HasModeratelyUsed = false;
+    	HasHeavilyUsed = false;
+    	available = false;
         Prices = new ArrayList<Double>();
         Conditions = new ArrayList<String>();
     }

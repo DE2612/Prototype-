@@ -1,0 +1,44 @@
+3
+A
+Title1
+Author 1
+D
+E
+Education
+3
+10.0
+Used Like New
+30.0
+Heavily Used
+15.0
+Used Like New
+true
+false
+true
+true
+A
+Title2
+Author 2
+D
+E
+Education
+1
+30.0
+Moderately Used
+false
+true
+false
+true
+A
+Title3
+Author 3
+D
+E
+Biology
+1
+50.0
+Used Like New
+true
+false
+false
+true

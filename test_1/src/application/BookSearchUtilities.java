@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
@@ -13,6 +17,14 @@ public class BookSearchUtilities {
     public ArrayList<Book> GetUpdatedList() {
         return BookList;
     }
+    BookSearchUtilities() {
+    	 BookList = new ArrayList<Book>();
+//    	try{
+//    		ReadBooks();
+//    	} catch(IOException E) {
+//    		E.printStackTrace();
+//    	}
+    }
     public void ReadBooks() throws IOException {
         BookList = new ArrayList<Book>();
         try {
@@ -20,11 +32,13 @@ public class BookSearchUtilities {
             int NumBooks = Integer.parseInt(reader.readLine());
             for(int i = 0; i < NumBooks; i++) {
                 Book TempBook = new Book();
+                TempBook.SetIndex(i);
                 TempBook.ID = reader.readLine();
                 TempBook.Title = reader.readLine();
-                TempBook.author = reader.readLine();
+                TempBook.Author = reader.readLine();
                 TempBook.ISBN = reader.readLine();
                 TempBook.description = reader.readLine();
+                TempBook.Catagory = reader.readLine();
                 int AvailableCount = Integer.parseInt(reader.readLine());
                 for(int i2 = 0; i2 < AvailableCount; i2++) {
                     TempBook.AddBook(Double.parseDouble(reader.readLine()), reader.readLine());
@@ -35,6 +49,7 @@ public class BookSearchUtilities {
                 TempBook.available = Boolean.parseBoolean(reader.readLine());
                 BookList.add(TempBook);
             }
+            reader.close();
 
         } catch(IOException E) {
             E.printStackTrace();
@@ -45,18 +60,19 @@ public class BookSearchUtilities {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("test_1/BookList.txt"));
             int NumBooks = BookList.size();
-            writer.write(Integer.toString(NumBooks));
+            writer.write(Integer.toString(NumBooks) + "\n");
             for(int i = 0; i < NumBooks; i++) {
                 Book TempBook = BookList.get(i);
-                writer.newLine();
-                writer.write(TempBook.ID);
-                writer.write(TempBook.Title);
-                writer.write(TempBook.author);
-                writer.write(TempBook.ISBN);
-                writer.write(Boolean.toString(TempBook.available));
-                writer.write(TempBook.description);
+                TempBook.SetIndex(i);
+                writer.write(TempBook.ID + "\n");
+                writer.write(TempBook.Title + "\n");
+                writer.write(TempBook.Author + "\n");
+                writer.write(TempBook.ISBN + "\n");
+                writer.write(TempBook.description + "\n");
+                writer.write(TempBook.Catagory + "\n");
                 TempBook.SerializeBook(writer);
             }
+            writer.close();
         } catch(IOException E) {
             E.printStackTrace();
         }
@@ -79,6 +95,7 @@ public class BookSearchUtilities {
             };
         }
         if(!FoundDuplicate) {
+        	TargetBook.SetIndex(BookList.size());
             BookList.add(TargetBook);
         }
     }
@@ -101,13 +118,14 @@ public class BookSearchUtilities {
         }
         return Distances[InputLength + ComparativeLength * (InputLength + 1)];
     }
-    public ArrayList<Book> GetSortedBooks(ArrayList<Book> WorkingBookList, String SearchBy, String SearchTerm, int SimilarityLevel) {//You can use this to progressively refine your search by calling it multiple times on the same "working set"
-        int WorkingSetSize = WorkingBookList.size();
+    public FilteredList<Book> GetSortedBooks(FilteredList<Book> WorkingBookListA, String SearchBy, String SearchTerm, int SimilarityLevel) {//You can use this to progressively refine your search by calling it multiple times on the same "working set"
+        ArrayList<Book> WorkingBookList = new ArrayList<Book>(WorkingBookListA);
+    	int WorkingSetSize = WorkingBookList.size();
         for (int i = WorkingSetSize - 1; i >= 0; i--) {
             boolean RemoveCurrent = false;
             switch (SearchBy) {
                 case "Author":
-                    if (CalcLevenshteinDistance(SearchTerm, WorkingBookList.get(i).author) > SimilarityLevel) RemoveCurrent = true;
+                    if (CalcLevenshteinDistance(SearchTerm, WorkingBookList.get(i).Author) > SimilarityLevel) RemoveCurrent = true;
                 break;
                 case "Title":
                     if (CalcLevenshteinDistance(SearchTerm, WorkingBookList.get(i).Title) > SimilarityLevel) RemoveCurrent = true;
@@ -124,11 +142,14 @@ public class BookSearchUtilities {
                 case "RemoveLikeNew":
                     if (WorkingBookList.get(i).HasLikeNew) RemoveCurrent = true;
                 break;
+                case "Catagory":
+                    if (!WorkingBookList.get(i).Catagory.equals(SearchTerm)) RemoveCurrent = true;
+                break;
             }
             if(RemoveCurrent) WorkingBookList.remove(i);
         }
         WorkingBookList.sort((a, b) -> {return a.Title.compareToIgnoreCase(b.Title);});
-        return WorkingBookList;
+        return new FilteredList<Book>(FXCollections.observableArrayList(WorkingBookList));
     }
 
 
