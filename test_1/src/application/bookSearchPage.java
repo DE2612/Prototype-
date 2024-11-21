@@ -1,4 +1,7 @@
-//TODO: 
+package application;
+
+
+//TODO:
 // add search functionality
 // add filter by condition functionality
 // add filter by category functionality
@@ -17,14 +20,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.BufferedReader;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.*;
+import javafx.scene.control.ComboBox;
 
 import java.util.ArrayList;
 
@@ -40,9 +42,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -68,13 +67,15 @@ public class bookSearchPage extends CycledView {
   
   public static Label pageTitle = new Label();
   public static Label title = new Label();
-  public static Rectangle titleRect = new Rectangle();
+  public static Label emptyInput = new Label();
+  public static Label underConstruction = new Label();
 
+
+  public static Rectangle titleRect = new Rectangle();
 
   public static Button log_out_btn = new Button();
   public static Button back_btn = new Button();
   public static Button cart_btn = new Button();
-  
   public static Button search_btn = new Button();
 
   //public static InputStream booksFile = new FileInputStream("booksTests.txt");
@@ -82,8 +83,28 @@ public class bookSearchPage extends CycledView {
   public static ImageView booksDisplay = new ImageView();
   public static ScrollPane bookScroll = new ScrollPane();
 
+
+  public static ObservableList<String> categories_list =
+          FXCollections.observableArrayList(
+                  "Education",
+                  "Non-fiction",
+                  "Fiction",
+                  "Mathematics",
+                  "Biology",
+                  "Computer Science",
+                  "Music",
+                  "History"
+          );
+
+
+
+
   @Override
     void createGUI() {
+
+    // Initialize drop down menu
+    final ComboBox<String> categories_box = new ComboBox<String>(categories_list);
+
 
 //*********************************//
 //*******FOR TESTING START*********//
@@ -176,16 +197,23 @@ public class bookSearchPage extends CycledView {
               + "	-fx-arc-height: 10px;");
       
       //****** Category Tile Formatting ******//
-      Rectangle categoryRect = new Rectangle(1075,490,250,220);// right, down, width, height
+      /*Rectangle categoryRect = new Rectangle(1075,490,250,220);// x, y, width, height
       categoryRect.setFill(Color.WHITE);
-      categoryRect.setStyle("-fx-padding: 8px; /* Padding (top, right, bottom, left) */\r\n"
+      categoryRect.setStyle("-fx-padding: 8px;"
               + "	-fx-stroke: transparent;"
               + "	-fx-stroke-width: 0;"
               + "	-fx-arc-width: 10px;"
               + "	-fx-arc-height: 10px;");
+      */
+      categories_box.setPrefWidth(250);
+      categories_box.setLayoutX(1075);
+      categories_box.setLayoutY(500);
+      categories_box.setVisibleRowCount(5);
+      categories_box.setPromptText("Category");
 
-      //****** Results Tile Formatting ******//
-      Rectangle resultsRect = new Rectangle(50,260,1000,450);// right, down, width, height
+
+    //****** Results Tile Formatting ******//
+      Rectangle resultsRect = new Rectangle(50,260,1000,450);// x, y, width, height
       resultsRect.setFill(Color.WHITE);
       resultsRect.setStyle("-fx-padding: 8px; /* Padding (top, right, bottom, left) */\r\n"
               + "	-fx-stroke: transparent;"
@@ -279,68 +307,68 @@ public class bookSearchPage extends CycledView {
           + "    -fx-alignment: center;");
       cart_btn.setLayoutX(1230);
       cart_btn.setLayoutY(50);
- 
 
-      getChildren().addAll(title, pageTitle, log_out_btn, back_btn, cart_btn, conditionsRect, categoryRect, resultsRect, search_btn, search_field);
+      //***********Message Displayed when search is pressed but textbox is empty*****//
+      emptyInput.setText("Empty input. Please enter search criteria.");
+      emptyInput.setStyle("-fx-pref-width: 900px;"
+              + "    -fx-pref-height: 60px;"
+              + "    -fx-text-fill: #464544;"
+              + "    -fx-font-family: \"Inter\";"
+              + "    -fx-font-size: 30px;"
+              + "    -fx-text-alignment: left;");
+      emptyInput.setVisible(false);
+      emptyInput.setLayoutX(300);
+      emptyInput.setLayoutY(350);
 
-      log_out_btn.setOnAction((ActionEvent e) -> {
-          callNext1();
-        });
-      
-      back_btn.setOnAction((ActionEvent e) -> {
-        // TODO: Figure out why this button isn't working
-        callNext2();
+    //***********Temporary Message Displayed while search function is under construction**********//
+    underConstruction.setText("This function is underconstruction.");
+    underConstruction.setStyle("-fx-pref-width: 900px;"
+            + "    -fx-pref-height: 60px;"
+            + "    -fx-text-fill: RED;"
+            + "    -fx-font-family: \"Inter\";"
+            + "    -fx-font-size: 30px;"
+            + "    -fx-text-alignment: left;");
+    underConstruction.setLayoutX(300);
+    underConstruction.setLayoutY(350);
+    underConstruction.setVisible(false);
+
+
+    getChildren().addAll(
+            /*labels*/    title, pageTitle, emptyInput, underConstruction,
+            /*buttons*/   log_out_btn, back_btn, cart_btn, search_btn,
+            /*shapes*/    conditionsRect, resultsRect,
+            /*txt field*/ search_field,
+            /*menus*/     categories_box);
+
+    log_out_btn.setOnAction((ActionEvent e) -> {
+        callNext1();
       });
 
-      back_btn.setOnAction((ActionEvent e) -> {
-        //callNext3();  // TODO: uncomment when cart scene is created
-      });
+    back_btn.setOnAction((ActionEvent e) -> {
+      // TODO: Figure out why this button isn't working
+      callNext2();
+    });
 
-
+    cart_btn.setOnAction((ActionEvent e) -> {
+      //callNext3();  // TODO: uncomment when cart scene is created
+    });
 
     search_btn.setOnAction((ActionEvent e) -> {
       // TODO: add code to read text from search_field
-      //callNext1();
-    
+        String search_criteria = "";
+        search_criteria = search_field.getText();
 
-      //***********TESTING************************//
-      /*textField.setOnKeyReleased(keyEvent ->
-      {
-        //TODO: code for book search needed @payton
-        if(!textField.getText().equals("")) {
-          filteredBooks.setPredicate(p -> p.getTitle().toLowerCase().contains(textField.getText().toLowerCase().trim()));
+        emptyInput.setVisible(false);
+        underConstruction.setVisible(false);
+
+        if (search_criteria.isEmpty()) {
+          emptyInput.setVisible(true);
+        } else {
+          underConstruction.setVisible(true);
         }
 
-      });*/
-      //*********FOR TESTING END*****************//
-      
-/*
-      try {
-        read();
-      } catch (IOException e1) {
-        e1.printStackTrace();
-      }
-        log_id = id_field.getText();
-        log_pass = password_field.getText();
-        if (log_id.length() <= 0 || log_pass.length() <= 0) {
-          System.out.println("Please enter ID and password");
-          return;
-        }
-        for (int i = 0; i < credentialsArray.size(); i++) {
-          if (log_id.equals(credentialsArray.get(i)) && log_pass.equals(passwordArray.get(i))) {
-  
-              mainMenuPage.welcomeName.setText("Welcome " + log_id);
-              credentialsArray.clear();
-              passwordArray.clear();
-              callNext3();
-            return;
-          }
-  
-        }
-        System.out.println("Wrong ID or password");
-*/
-      });
-  }
+    });
+}
 //**************************************************************************//
 //**********************book object class FOR TESTING ONLY******************//
 /*  
