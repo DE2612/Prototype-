@@ -14,11 +14,6 @@ import javafx.event.ActionEvent;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.BufferedReader;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -26,7 +21,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.*;
-import javafx.scene.control.ComboBox;
 
 import java.util.ArrayList;
 
@@ -57,20 +51,21 @@ public class bookSearchPage extends CycledView {
 
   private ArrayList<String> searchArray = new ArrayList<String>();
 
-/**************************
-  //FOR TESTING START
-  private TableView<Book> table = new TableView();
-  Set<Book> hashSet = new HashSet();   
+
   private ObservableList<Book> data;
-  //FOR TESTING END
-****************************/
+  
+  BookSearchUtilities SearchUtils;// = new BookSearchUtilities();
+  ArrayList<Book> WorkingSet = new ArrayList<Book>();
   
   public static Label pageTitle = new Label();
   public static Label title = new Label();
   public static Label emptyInput = new Label();
   public static Label underConstruction = new Label();
 
-
+  public static CheckBox LikeNewCheckBox = new CheckBox();
+  public static CheckBox HeavilyUsedCheckBox = new CheckBox();
+  public static CheckBox ModeratelyUsedCheckBox = new CheckBox();
+  
   public static Rectangle titleRect = new Rectangle();
 
   public static Button log_out_btn = new Button();
@@ -83,9 +78,10 @@ public class bookSearchPage extends CycledView {
   public static ImageView booksDisplay = new ImageView();
   public static ScrollPane bookScroll = new ScrollPane();
 
-
+  FilteredList<Book> filteredBooks;
   public static ObservableList<String> categories_list =
           FXCollections.observableArrayList(
+        		  "Any",
                   "Education",
                   "Non-fiction",
                   "Fiction",
@@ -95,7 +91,13 @@ public class bookSearchPage extends CycledView {
                   "Music",
                   "History"
           );
-
+  public static ObservableList<String> SearchByList =
+          FXCollections.observableArrayList(
+        		  "None",
+        		  "Title",
+        		  "Author",
+        		  "ISBN"
+          );
 
 
 
@@ -103,64 +105,47 @@ public class bookSearchPage extends CycledView {
     void createGUI() {
 
     // Initialize drop down menu
-    final ComboBox<String> categories_box = new ComboBox<String>(categories_list);
+	    final ComboBox<String> categories_box = new ComboBox<String>(categories_list);
+	    final ComboBox<String> SearchByBox = new ComboBox<String>(SearchByList);
+
+	  SearchUtils = new BookSearchUtilities();
+
 
 
 //*********************************//
 //*******FOR TESTING START*********//
 /*      
-      //Book(String title, String condition, String category, String author, String price)
-
-      hashSet.add(new Book("Title1","Used Like New", "Fiction", "Author1", "10.00"));
-      hashSet.add(new Book("Title2","Moderately Used", "Non-Fiction", "Author2", "30.00"));
-      hashSet.add(new Book("Title3","Used Like New", "Educational", "Author3", "50.00"));
-
-      data = FXCollections.observableArrayList(hashSet);
-
-      final Label label = new Label("Search Results");
-      label.setFont(new Font("Arial", 20));
-
-      table.setEditable(true);
-
-      TableColumn titleCol = new TableColumn("Title");
-      titleCol.setMinWidth(100);
-      titleCol.setCellValueFactory(
-              new PropertyValueFactory<Book, String>("bookTitle"));
-
-      TableColumn conditionCol = new TableColumn("Condition");
-      conditionCol.setMinWidth(100);
-      conditionCol.setCellValueFactory(
-              new PropertyValueFactory<Book, String>("bookCondition"));
-
-      TableColumn categoryCol = new TableColumn("Category");
-      categoryCol.setMinWidth(200);
-      categoryCol.setCellValueFactory(
-              new PropertyValueFactory<Book, String>("bookCategory"));
-
-      TableColumn authorCol = new TableColumn("Author");
-      authorCol.setMinWidth(200);
-      authorCol.setCellValueFactory(
-              new PropertyValueFactory<Book, String>("bookAuthor"));
-
-      TableColumn priceCol = new TableColumn("Price");
-      priceCol.setMinWidth(200);
-      priceCol.setCellValueFactory(
-              new PropertyValueFactory<Book, String>("bookPrice"));
-
-      FilteredList<Book> filteredBooks = new FilteredList(data, p -> true);//Pass the data to a filtered list
-      table.setItems(filteredBooks);//Set the table's items using the filtered list
-      table.getColumns().addAll(titleCol, conditionCol, categoryCol, authorCol, priceCol);
-
-      ChoiceBox<String> choiceBox = new ChoiceBox();
-      choiceBox.getItems().addAll("Title", "Condition", "Category", "Author", "Price");
-      choiceBox.setValue("Title");
-
-      TextField textField = new TextField();
-      textField.setPromptText("Enter search criteria");
+	  Book ThisBook = new Book();
+	  ThisBook.Title = "Title1";
+	  ThisBook.Author = "Author 1";
+	  ThisBook.Catagory = "Education";
+	  ThisBook.AddBook(10.00, "Used Like New");
+	  ThisBook.AddBook(30.00, "Heavily Used");
+	  ThisBook.AddBook(15.00, "Used Like New");
+	  SearchUtils.AddBook(ThisBook);
+	  ThisBook = new Book();
+	  ThisBook.Title = "Title2";
+	  ThisBook.Author = "Author 2";
+	  ThisBook.Catagory = "Education";
+	  ThisBook.AddBook(30.00, "Moderately Used");
+	  SearchUtils.AddBook(ThisBook);
+	  ThisBook = new Book();
+	  ThisBook.Title = "Title3";
+	  ThisBook.Author = "Author 3";
+	  ThisBook.Catagory = "Biology";
+	  ThisBook.AddBook(50.00, "Used Like New");
+	  SearchUtils.AddBook(ThisBook);
+	  try{SearchUtils.WriteBooks();} catch(IOException E) {E.printStackTrace();}
 */
 //**********FOR TESTING END*************//
 //*************************************//
 
+	  try{SearchUtils.ReadBooks();} catch(IOException E) {E.printStackTrace();}
+	  WorkingSet = SearchUtils.GetUpdatedList();
+
+      data = FXCollections.observableArrayList(WorkingSet);
+      filteredBooks = new FilteredList(data);//Pass the data to a filtered list
+	  
       //***** Site Title Formatting ******//
       title.setText("Sun Devil Book Exchange");
       title.setStyle("-fx-pref-width: 455px;          /* Preferred width */\r\n"
@@ -205,6 +190,29 @@ public class bookSearchPage extends CycledView {
               + "	-fx-arc-width: 10px;"
               + "	-fx-arc-height: 10px;");
       */
+      
+      LikeNewCheckBox = new CheckBox("Like New");
+      LikeNewCheckBox.setLayoutX(1075);
+      LikeNewCheckBox.setLayoutY(260);
+      LikeNewCheckBox.setSelected(true);
+      
+      ModeratelyUsedCheckBox = new CheckBox("ModeratelyUsed");
+      ModeratelyUsedCheckBox.setLayoutX(1075);
+      ModeratelyUsedCheckBox.setLayoutY(280);
+      ModeratelyUsedCheckBox.setSelected(true);
+      
+      HeavilyUsedCheckBox = new CheckBox("Heavily Used");
+      HeavilyUsedCheckBox.setLayoutX(1075);
+      HeavilyUsedCheckBox.setLayoutY(300);
+      HeavilyUsedCheckBox.setSelected(true);
+
+      
+      SearchByBox.setPrefWidth(250);
+      SearchByBox.setLayoutX(750);
+      SearchByBox.setLayoutY(200);
+      SearchByBox.setVisibleRowCount(5);
+      SearchByBox.setPromptText("Search By");
+      
       categories_box.setPrefWidth(250);
       categories_box.setLayoutX(1075);
       categories_box.setLayoutY(500);
@@ -220,6 +228,16 @@ public class bookSearchPage extends CycledView {
               + "	-fx-stroke-width: 0;"
               + "	-fx-arc-width: 10px;"
               + "	-fx-arc-height: 10px;");
+      
+      bookScroll.setStyle("-fx-padding: 8px; /* Padding (top, right, bottom, left) */\r\n"
+              + "	-fx-stroke: transparent;"
+              + "	-fx-stroke-width: 0;"
+              + "	-fx-arc-width: 10px;"
+              + "	-fx-arc-height: 10px;");
+      bookScroll.setPrefWidth(1000);
+      bookScroll.setPrefHeight(450);
+      bookScroll.setLayoutX(50);
+      bookScroll.setLayoutY(260);
       
       //****** Search Bar Formatting ******//
       TextField search_field = new TextField("Title, Author, Keyword, or ISBN");
@@ -334,11 +352,13 @@ public class bookSearchPage extends CycledView {
 
 
     getChildren().addAll(
-            /*labels*/    title, pageTitle, emptyInput, underConstruction,
+            /*labels*/    title, pageTitle, 
             /*buttons*/   log_out_btn, back_btn, cart_btn, search_btn,
             /*shapes*/    conditionsRect, resultsRect,
             /*txt field*/ search_field,
-            /*menus*/     categories_box);
+            /*menus*/     categories_box,
+            emptyInput, underConstruction, SearchByBox,
+            LikeNewCheckBox, ModeratelyUsedCheckBox, HeavilyUsedCheckBox);
 
     log_out_btn.setOnAction((ActionEvent e) -> {
         callNext1();
@@ -353,21 +373,58 @@ public class bookSearchPage extends CycledView {
       //callNext3();  // TODO: uncomment when cart scene is created
     });
 
-    search_btn.setOnAction((ActionEvent e) -> {
-      // TODO: add code to read text from search_field
-        String search_criteria = "";
-        search_criteria = search_field.getText();
+	getChildren().add(bookScroll);
+    
+	search_btn.setOnAction((ActionEvent e) -> {
+        // TODO: add code to read text from search_field
+          String search_criteria = "";
+          search_criteria = search_field.getText();
 
-        emptyInput.setVisible(false);
-        underConstruction.setVisible(false);
+          emptyInput.setVisible(false);
+          underConstruction.setVisible(false);
+          if (search_criteria.isEmpty()) {
+            emptyInput.setVisible(true);
+          } else {
+            underConstruction.setVisible(true);
+          }
+          System.out.println(categories_box.getValue());
+          filteredBooks = new FilteredList(FXCollections.observableArrayList(SearchUtils.GetUpdatedList()));//Pass the data to a filtered list  
+      	if(!LikeNewCheckBox.isSelected())filteredBooks = SearchUtils.GetSortedBooks(filteredBooks, "RemoveLikeNew", "", 0);
+      	if(!ModeratelyUsedCheckBox.isSelected())filteredBooks = SearchUtils.GetSortedBooks(filteredBooks, "RemoveModeratelyUsed", "", 0);
+      	if(!HeavilyUsedCheckBox.isSelected())filteredBooks = SearchUtils.GetSortedBooks(filteredBooks, "RemoveHeavilyUsed", "", 0);
+          if(categories_box.getValue() != null && !categories_box.getValue().equals("Any")) filteredBooks = SearchUtils.GetSortedBooks(filteredBooks, "Catagory", categories_box.getValue(), 0);
+          if(SearchByBox.getValue() != null && !SearchByBox.getValue().equals("None")) filteredBooks = SearchUtils.GetSortedBooks(filteredBooks, SearchByBox.getValue(), search_criteria, 2);
+      	
 
-        if (search_criteria.isEmpty()) {
-          emptyInput.setVisible(true);
-        } else {
-          underConstruction.setVisible(true);
-        }
+  		VBox box = new VBox();
 
-    });
+  		for(int i = 0; i < filteredBooks.size(); i++) {
+      		HBox SelectedBook = new HBox();
+      			Book TempBook = filteredBooks.get(i);
+      			Label TempLabel = new Label(filteredBooks.get(i).Title + "    " + filteredBooks.get(i).Author + "    " + filteredBooks.get(i).Catagory);
+      			ArrayList<String> AvailableBooks = new ArrayList<String>();
+      			for(int j = 0; j < filteredBooks.get(i).AvailableCount; j++) {
+      				AvailableBooks.add(filteredBooks.get(i).Conditions.get(j) + ": $" + Double.toString(filteredBooks.get(i).Prices.get(j)));
+      			}
+      		    final ComboBox<String> AvailableBox = new ComboBox<String>(FXCollections.observableArrayList(AvailableBooks));        			
+      		    AvailableBox.setPromptText("Select Your Book");
+      		    
+      		    Button AddToCartButton = new Button();
+      		    AddToCartButton.setText("Add to Cart");
+      		    
+      		    AddToCartButton.setOnAction((ActionEvent e2) -> {
+  		    		System.out.println(AvailableBox.getSelectionModel().getSelectedIndex());
+      		    	int BookIndex = TempBook.GetIndex();//This is the index into the book TEXT file, so you can read the file again somewhere and just pass in this index
+		    			int BookInstanceIndex = AvailableBox.getSelectionModel().getSelectedIndex();//Since each "Book" instance stores every identitcal book(with varying price/conditions), this is the index into the price/condition list to retrieve a specific book
+      		    });
+      		    
+      			SelectedBook.getChildren().addAll(TempLabel, AvailableBox, AddToCartButton);
+      		box.getChildren().add(SelectedBook);
+  		}
+  		bookScroll.setContent(box);
+//        }
+
+      });
 }
 //**************************************************************************//
 //**********************book object class FOR TESTING ONLY******************//
