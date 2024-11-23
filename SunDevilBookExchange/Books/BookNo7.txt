@@ -1,0 +1,9 @@
+1
+test42
+Author42
+ISBN42
+Synopsis so cool!
+7 8 
+13.0
+1
+admin
