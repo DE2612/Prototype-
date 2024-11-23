@@ -97,7 +97,7 @@ public class userProfile extends CycledView{
         userNameField.setLayoutX(50);
         userNameField.setLayoutY(150);
 
-        Label currentIdLabel = new Label("Current ID: " + userNameField.getText());
+        Label currentIdLabel = new Label("Current ID: " + loginPage.log_id);
         currentIdLabel.setStyle("-fx-spacing: 15; -fx-text-fill: #7A7A7A; -fx-font-family: \"Arial\"; -fx-font-size: 14px;");
         currentIdLabel.setLayoutX(50);
         currentIdLabel.setLayoutY(100);

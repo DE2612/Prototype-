@@ -21,7 +21,7 @@ public class Main extends Application {
 		CycledView forgotPasswordScene = new forgotPasswordPage(null, null, null, null, null);
 		CycledView mainMenuScene = new mainMenuPage( null, null, null, null, null);
 		CycledView bookSearchScene = new bookSearchPage(null, null, null, null, null);
-		CycledView userProfile = new userProfile(mainMenuScene.getId(), null,null,null,null,null,null); //breck
+		CycledView userProfile = new userProfile(null, null,null,null,null,null,null); //breck
 
 		loginScene.setStyle("-fx-background-color: #FFEEB7;");
 		loginScene.next1 = createAccountScene;
