@@ -42,7 +42,7 @@ public class bookViewPage extends CycledView{
 				+ "    -fx-font-size: 24px;\r\n");
 		
 		try {
-			Path = new FileInputStream("src/placeholder.png");
+			Path = new FileInputStream("SunDevilBookExchange/src/placeholder.png");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
