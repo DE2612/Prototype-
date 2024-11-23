@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -84,6 +85,7 @@ public class sellBookPage extends CycledView{
 	    		+ "    -fx-alignment: CENTER_LEFT;         /* Align text to the left */");
 		titleField.setLayoutX(113);
 		titleField.setLayoutY(180);
+		titleField.setPromptText("Enter Book Title");
 		
 		TextField authorField = new TextField();
 		authorField.setStyle(" -fx-pref-width: 570px;\r\n"
@@ -103,6 +105,7 @@ public class sellBookPage extends CycledView{
 	    		+ "    -fx-alignment: CENTER_LEFT;         /* Align text to the left */");
 		authorField.setLayoutX(113);
 		authorField.setLayoutY(180 + 40);
+		authorField.setPromptText("Enter Book Author");
 		
 		TextField ISBNField = new TextField();
 		ISBNField.setStyle(" -fx-pref-width: 570px;\r\n"
@@ -122,6 +125,7 @@ public class sellBookPage extends CycledView{
 	    		+ "    -fx-alignment: CENTER_LEFT;         /* Align text to the left */");
 		ISBNField.setLayoutX(113);
 		ISBNField.setLayoutY(180 + 80);
+		ISBNField.setPromptText("Enter Book ISBN");
 		
 		//----------Condition Box----------//
 		
@@ -263,6 +267,7 @@ public class sellBookPage extends CycledView{
 				+ "    -fx-font-size: 18px;\r\n"
 				+ "    -fx-line-spacing: 1.3em; /* Adjusts line spacing */\r\n");
 		synopsis.setWrapText(true);
+		synopsis.setPromptText("Enter Synopsis (optional)");
 		
 		//----------Image Uploader---------//
 		
@@ -490,6 +495,7 @@ public class sellBookPage extends CycledView{
 				+ "    -fx-background-radius: 3px;");
 		originalBookPriceField.setLayoutX(438);
 		originalBookPriceField.setLayoutY(532);
+		originalBookPriceField.setPromptText("0.00");
 		
 		//----------Functional Buttons---------//
 		
@@ -660,7 +666,58 @@ public class sellBookPage extends CycledView{
 		list_book_btn.setLayoutX(1124);
 		list_book_btn.setLayoutY(101);
 		
+		Label Warning1 = new Label("Error: Please Enter All Required Fields!");
+		Warning1.setLayoutX(1366/2 - 200); 
+		Warning1.setLayoutY(730);
+		Warning1.setTextFill(Color.RED);
+		Warning1.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 24px;\r\n");
+		
+		Label Warning2 = new Label("Error: Original Book Price Should Be Numbers!");
+		Warning2.setLayoutX(1366/2 - 200); 
+		Warning2.setLayoutY(730);
+		Warning2.setTextFill(Color.RED);
+		Warning2.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 24px;\r\n");
+		
+		Label Warning3 = new Label("Error: Please Choose Condition!");
+		Warning3.setLayoutX(1366/2 - 200); 
+		Warning3.setLayoutY(730);
+		Warning3.setTextFill(Color.RED);
+		Warning3.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 24px;\r\n");
+		
+		Label Warning4 = new Label("Error: Please Choose At Least 1 Category!");
+		Warning4.setLayoutX(1366/2 - 200); 
+		Warning4.setLayoutY(730);
+		Warning4.setTextFill(Color.RED);
+		Warning4.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 24px;\r\n");
+		
 		list_book_btn.setOnAction(actionEvent -> {
+			
+			if (titleField.getText().length() <= 0 || authorField.getText().length() <= 0 || ISBNField.getText().length() <= 0 || originalBookPriceField.getText().length() <= 0) {
+				getChildren().remove(Warning1);
+				getChildren().remove(Warning2);
+				getChildren().remove(Warning3);
+				getChildren().remove(Warning4);
+				getChildren().add(Warning1);
+				return;
+			}
+			
+			if (isLikeNew == false && isModerate == false && isHeavily == false) {
+				getChildren().remove(Warning1);
+				getChildren().remove(Warning2);
+				getChildren().remove(Warning3);
+				getChildren().remove(Warning4);
+				getChildren().add(Warning3);
+				return;
+			}
+			
 			int numBooks = 0;
 	    	
 			BufferedReader numBooksReader = null;
@@ -680,6 +737,19 @@ public class sellBookPage extends CycledView{
 			newBook.ISBN = ISBNField.getText();
 			newBook.description = synopsis.getText();
 			
+			try {
+				newBook.price = Double.parseDouble(originalBookPriceField.getText());
+			} catch (NumberFormatException E) {
+				getChildren().remove(Warning1);
+				getChildren().remove(Warning2);
+				getChildren().remove(Warning3);
+				getChildren().remove(Warning4);
+				getChildren().add(Warning2);
+				return;
+			}
+			newBook.available = 1;
+			newBook.seller = mainMenuPage.welcomeName.getText().substring(8);
+			
 			ArrayList<Integer> newCategory = new ArrayList<Integer>();
 			
 			if (category1.isSelected()) { newCategory.add(1); }
@@ -691,15 +761,20 @@ public class sellBookPage extends CycledView{
 			if (category7.isSelected()) { newCategory.add(7); }
 			if (category8.isSelected()) { newCategory.add(8); }
 			
+			if (newCategory.size() == 0) {
+				getChildren().remove(Warning1);
+				getChildren().remove(Warning2);
+				getChildren().remove(Warning3);
+				getChildren().remove(Warning4);
+				getChildren().add(Warning4);
+				return;
+			}
+			
 			newBook.Catagory = newCategory;
 			
 			if (isLikeNew == true) { newBook.Condition = 1; }
 			if (isModerate == true) { newBook.Condition = 2; }
 			if (isHeavily == true) { newBook.Condition = 3; }
-			
-			newBook.price = Double.parseDouble(originalBookPriceField.getText());
-			newBook.available = 1;
-			newBook.seller = mainMenuPage.welcomeName.getText().substring(8);
 			
 			try {
 				BookSearchUtilities.addBook(newBook);

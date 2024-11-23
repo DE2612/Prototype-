@@ -278,6 +278,22 @@ public class forgotPasswordPage extends CycledView {
 	    
 		getChildren().addAll(deco1, mainRect, ASU, title, bookLogo, change_pass_btn, back, forgotPassword, Instruction, ID, id_field, mailLogo, password, password_field, passwordLogo);
 		
+		Label Warning1 = new Label("Error: Please enter ID or new password!");
+		Warning1.setLayoutX(895); 
+		Warning1.setLayoutY(250);
+		Warning1.setTextFill(Color.RED);
+		Warning1.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 15px;\r\n");
+		
+		Label Warning2 = new Label("Error: ID does not exist!");
+		Warning2.setLayoutX(895); 
+		Warning2.setLayoutY(250);
+		Warning2.setTextFill(Color.RED);
+		Warning2.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 15px;\r\n");
+		
 		change_pass_btn.setOnAction((ActionEvent e) -> {
 			credentialsArray.clear();
 			passwordArray.clear();
@@ -293,7 +309,9 @@ public class forgotPasswordPage extends CycledView {
 	    	newPassword = password_field.getText();
 	    	
 	    	if (newID.length() <= 0 || newPassword.length() <= 0) {
-	    		System.out.println("Please enter ID or new password");
+	    		getChildren().remove(Warning1);
+	    		getChildren().remove(Warning2);
+	    		getChildren().add(Warning1);
 	    		return;
 	    	}
 	    	
@@ -306,7 +324,9 @@ public class forgotPasswordPage extends CycledView {
 	    	}
 	    	
 	    	if (index < 0) {
-	    		System.out.println("Error: ID does not exist");
+	    		getChildren().remove(Warning1);
+	    		getChildren().remove(Warning2);
+	    		getChildren().add(Warning2);
 	    		return;
 	    	}
 	    	
