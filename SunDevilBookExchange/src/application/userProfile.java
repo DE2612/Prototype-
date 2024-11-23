@@ -342,6 +342,8 @@ public class userProfile extends CycledView {
 	    	credentialsArray.add(newID);
 	    	passwordArray.add(newPassword);
 	    	
+	    	BookSearchUtilities.renameCart(loginPage.log_id, newID);
+	    	
 	    	loginPage.log_id = newID;
 	    	loginPage.log_pass = newPassword;
 	 
