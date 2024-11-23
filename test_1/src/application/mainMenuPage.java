@@ -6,7 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Rectangle;
 
 public class mainMenuPage extends CycledView {
-
+private String log_id;
+private String log_pass;
 	mainMenuPage(CycledView next1, CycledView next2, CycledView next3, CycledView next4, CycledView next5) {
 		super(next1, next2, next3, next4, next5);
 		// TODO Auto-generated constructor stub
@@ -19,6 +20,7 @@ public class mainMenuPage extends CycledView {
 	public static Button sell_btn = new Button();
 	public static Button log_out_btn = new Button();
 	public static Rectangle titleRect = new Rectangle();
+	public static Button userProfile_btn = new Button();
 
 	@Override
 	void createGUI() {
@@ -205,8 +207,63 @@ public class mainMenuPage extends CycledView {
 				+ "    -fx-text-alignment: center;     /* Text alignment */");
 		title.setLayoutX(364);
 		title.setLayoutY(-18);
+
+		//breck code
+		userProfile_btn.setText("User Profile");
+		userProfile_btn.setStyle("-fx-pref-width: 261px;\r\n"
+				+ "    -fx-pref-height: 54px;\r\n"
+				+ "    -fx-padding: 0px 10px 0px 10px;\r\n"
+				+ "    -fx-background-color: #BF0045;\r\n"
+				+ "    -fx-text-fill: #EBEBEB;\r\n"
+				+ "    -fx-border-color: #BF0045;\r\n"
+				+ "    -fx-border-width: 1px;\r\n"
+				+ "    -fx-border-style: solid;\r\n"
+				+ "    -fx-border-radius: 3px 3px 3px 3px;\r\n"
+				+ "    -fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 36px;\r\n"
+				+ "    -fx-alignment: center;");
+		userProfile_btn.setOnMouseEntered(e -> userProfile_btn.setStyle("-fx-pref-width: 261px;\r\n"
+				+ "    -fx-pref-height: 54px;\r\n"
+				+ "    -fx-padding: 0px 10px 0px 10px;\r\n"
+				+ "    -fx-background-color: #A60038;\r\n"
+				+ "    -fx-text-fill: #FFFFFF;\r\n"
+				+ "    -fx-border-color: #BF0045;\r\n"
+				+ "    -fx-border-width: 1px;\r\n"
+				+ "    -fx-border-style: solid;\r\n"
+				+ "    -fx-border-radius: 3px 3px 3px 3px;\r\n"
+				+ "    -fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 36px;\r\n"
+				+ "    -fx-alignment: center;"));
+		userProfile_btn.setOnMouseExited(e -> userProfile_btn.setStyle("-fx-pref-width: 261px;\r\n"
+				+ "    -fx-pref-height: 54px;\r\n"
+				+ "    -fx-padding: 0px 10px 0px 10px;\r\n"
+				+ "    -fx-background-color: #BF0045;\r\n"
+				+ "    -fx-text-fill: #EBEBEB;\r\n"
+				+ "    -fx-border-color: #BF0045;\r\n"
+				+ "    -fx-border-width: 1px;\r\n"
+				+ "    -fx-border-style: solid;\r\n"
+				+ "    -fx-border-radius: 3px 3px 3px 3px;\r\n"
+				+ "    -fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 36px;\r\n"
+				+ "    -fx-alignment: center;"));
+
+		userProfile_btn.setLayoutX(829); // Position X
+		userProfile_btn.setLayoutY(506); // Position Y (below other buttons)
+
+		userProfile_btn.setOnAction(e -> {
+			if (next4 != null) {
+				this.getScene().setRoot(next4);
+
+			}
+		});
+		this.getChildren().add(userProfile_btn);
+
+		//end breck code
 		
-		getChildren().addAll(titleRect, title, welcomeName, Instruction, buy_btn, sell_btn, log_out_btn);
+		getChildren().addAll(titleRect, title, welcomeName, Instruction, buy_btn, sell_btn, log_out_btn );
 		
 		log_out_btn.setOnAction((ActionEvent e) -> {
     		callNext1();

@@ -27,7 +27,7 @@ public class loginPage extends CycledView {
 	
 	private ArrayList<String> credentialsArray = new ArrayList<String>();
 	private ArrayList<String> passwordArray = new ArrayList<String>();
-	
+
 	
 	void read() throws IOException {
 		try {
@@ -44,8 +44,11 @@ public class loginPage extends CycledView {
 		
 	}
 	
-	String log_id;
-	String log_pass;
+	static String log_id;
+	static String log_pass;
+
+
+
 
 	@Override
 	void createGUI() {
@@ -346,7 +349,7 @@ public class loginPage extends CycledView {
 	    	}
 	    	for (int i = 0; i < credentialsArray.size(); i++) {
 	    		if (log_id.equals(credentialsArray.get(i)) && log_pass.equals(passwordArray.get(i))) {
-	    			
+
 	    	    	mainMenuPage.welcomeName.setText("Welcome " + log_id);
 	    	    	credentialsArray.clear();
 	    	    	passwordArray.clear();
