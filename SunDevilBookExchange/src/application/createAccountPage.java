@@ -280,6 +280,22 @@ public class createAccountPage extends CycledView {
 	    
 		getChildren().addAll(deco1, mainRect, ASU, title, bookLogo, create_btn, back, createAccount, Instruction, ID, id_field, mailLogo, password, password_field, passwordLogo);
 		
+		Label Warning1 = new Label("Error: Please enter ID or password!");
+		Warning1.setLayoutX(895); 
+		Warning1.setLayoutY(250);
+		Warning1.setTextFill(Color.RED);
+		Warning1.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 15px;\r\n");
+		
+		Label Warning2 = new Label("Error: ID already exists!");
+		Warning2.setLayoutX(895); 
+		Warning2.setLayoutY(250);
+		Warning2.setTextFill(Color.RED);
+		Warning2.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 15px;\r\n");
+		
 		create_btn.setOnAction((ActionEvent e) -> {
 			credentialsArray.clear();
 			passwordArray.clear();
@@ -295,14 +311,18 @@ public class createAccountPage extends CycledView {
 	    	newPassword = password_field.getText();
 	    	
 	    	if (newID.length() <= 0 || newPassword.length() <= 0) {
-	    		System.out.println("Please enter ID or password");
+	    		getChildren().remove(Warning1);
+	    		getChildren().remove(Warning2);
+	    		getChildren().add(Warning1);
 	    		return;
 	    	}
 	    	
 	    	
 	    	for (int i = 0; i < credentialsArray.size(); i++) {
 	    		if (newID.equals(credentialsArray.get(i))) {
-	    			System.out.println("Error: ID already exists");
+	    			getChildren().remove(Warning1);
+		    		getChildren().remove(Warning2);
+		    		getChildren().add(Warning2);
 	    			return;
 	    		}
 	    	}
