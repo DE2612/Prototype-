@@ -791,13 +791,16 @@ public class cartPage extends CycledView {
 			return;
       }
 	
+	BufferedWriter tempCartWriter;
 	try {
-		Files.delete(Paths.get("Carts/" + mainMenuPage.welcomeName.getText().substring(8) + "Cart.txt"));
-		System.out.println("file deleted successfully");
-	} catch (IOException e1) {
+		tempCartWriter = new BufferedWriter(new FileWriter("Carts/" + mainMenuPage.welcomeName.getText().substring(8) + "Cart.txt"));
+		tempCartWriter.write("");
+		tempCartWriter.close();
+	} catch (IOException e) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		e.printStackTrace();
 	}
+	System.out.println("file deleted successfully");
 	for (int i = 0; i < cartArrayString.size(); i++) {
 		BookSearchUtilities.addToCart(mainMenuPage.welcomeName.getText().substring(8), Integer.parseInt(cartArrayString.get(i)));
 	}
