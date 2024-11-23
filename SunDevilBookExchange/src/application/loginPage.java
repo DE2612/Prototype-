@@ -331,6 +331,23 @@ public class loginPage extends CycledView {
     		callNext2();
     	});
 		
+		
+		Label Warning1 = new Label("Error: Please enter ID and password!");
+		Warning1.setLayoutX(895); 
+		Warning1.setLayoutY(250);
+		Warning1.setTextFill(Color.RED);
+		Warning1.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 15px;\r\n");
+		
+		Label Warning2 = new Label("Error: Wrong ID or password!");
+		Warning2.setLayoutX(895); 
+		Warning2.setLayoutY(250);
+		Warning2.setTextFill(Color.RED);
+		Warning2.setStyle("-fx-font-family: \"Arial\";\r\n"
+				+ "    -fx-font-weight: bold;\r\n"
+				+ "    -fx-font-size: 15px;\r\n");
+		
 		logIn_btn.setOnAction((ActionEvent e) -> {
 			try {
 				read();
@@ -341,7 +358,9 @@ public class loginPage extends CycledView {
 	    	log_id = id_field.getText();
 	    	log_pass = password_field.getText();
 	    	if (log_id.length() <= 0 || log_pass.length() <= 0) {
-	    		System.out.println("Please enter ID and password");
+	    		getChildren().remove(Warning1);
+				getChildren().remove(Warning2);
+				getChildren().add(Warning1);;
 	    		return;
 	    	}
 	    	for (int i = 0; i < credentialsArray.size(); i++) {
@@ -355,7 +374,9 @@ public class loginPage extends CycledView {
 	    		}
 	    		
 	    	}
-	    	System.out.println("Wrong ID or password");
+	    	getChildren().remove(Warning1);
+			getChildren().remove(Warning2);
+			getChildren().add(Warning2);;
     	});
 	}
     
