@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 
 
@@ -80,6 +81,13 @@ public class BookSearchUtilities {
     	
     	return cartArrayString;
     }
+	
+	public static void renameCart(String oldUserName, String newUserName) {
+		File olfFile = new File("Carts/" + oldUserName + "Cart.txt");
+		File newFile = new File("Carts/" + newUserName + "Cart.txt");
+		
+		olfFile.renameTo(newFile);
+	}
 	
 	public static ArrayList<Book> readCertainBooks(ArrayList<String> array) throws NumberFormatException, IOException {
 		ArrayList<Book> tmpBookList= new  ArrayList<Book>();
