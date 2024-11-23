@@ -491,7 +491,7 @@ public class bookSearchPage extends CycledView {
 				}
               }
               
-              ImageView tmpImg;
+              ImageView tmpImg = null;
         	  BufferedReader tempBookReader;
         	  String tmptitle = null;
         	  String tmpAuthor = null;
@@ -535,13 +535,6 @@ public class bookSearchPage extends CycledView {
               for (int i : BookIndex) {
             	  FileInputStream path = null;
 				try {
-					path = new FileInputStream("BookImages/" + i + ".png");
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-            	  tmpImg = new ImageView(new Image(path));
-				try {
 					tempBookReader = new BufferedReader(new FileReader("Books/BookNo" + i + ".txt"));
 					tempBookReader.readLine();
 	          		 tmptitle = tempBookReader.readLine();
@@ -583,13 +576,6 @@ public class bookSearchPage extends CycledView {
 				}
 				
 				
-				
-					
-				tmpImg.setFitWidth(103);
-				tmpImg.setFitHeight(143);
-				tmpImg.setX(30);
-				tmpImg.setY(yOffset);
-				
 				Label details = new Label("Title: " + tmptitle + "\nAuthor: " + tmpAuthor + "\nSeller: " + tmpseller);
 				details.setLayoutX(200);
 				details.setLayoutY(yOffset);
@@ -600,8 +586,26 @@ public class bookSearchPage extends CycledView {
 						+ "    -fx-font-weight: normal; /* 400 corresponds to normal weight */\n"
 						+ "    -fx-font-size: 30px;\n"
 						+ "    -fx-alignment: baseline-left; /* Aligns text to the left */");
+				try {
+					path = new FileInputStream("BookImages/" + i + ".png");
+					tmpImg = new ImageView(new Image(path));
+					tmpImg.setFitWidth(103);
+					tmpImg.setFitHeight(143);
+					tmpImg.setX(30);
+					tmpImg.setY(yOffset);
+					resultsPane.getChildren().add(tmpImg);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					Rectangle ImgPlaceHolder = new Rectangle();
+					ImgPlaceHolder.setFill(Color.LIGHTGRAY);
+					ImgPlaceHolder.setHeight(143);
+					ImgPlaceHolder.setWidth(103);
+					ImgPlaceHolder.setX(30);
+					ImgPlaceHolder.setY(yOffset);
+					resultsPane.getChildren().add(ImgPlaceHolder);
+					e1.printStackTrace();
+				}
 				
-				resultsPane.getChildren().add(tmpImg);
 				resultsPane.getChildren().add(details);
 				
 				yOffset += 155;
