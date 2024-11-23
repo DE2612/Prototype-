@@ -563,6 +563,12 @@ public class cartPage extends CycledView {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
+		for (int i = booksInCart.size()-1; i >= 0; i--) {
+			if (booksInCart.get(i).available == 0) {
+				cartArrayString.remove(i);
+				booksInCart.remove(i);
+			}
+		}
       int yOffset = 30; // Start vertical offset for results
       for (int i = 0; i < cartArrayString.size(); i++) { // Create many results to demonstrate scrolling
     	  
@@ -680,15 +686,18 @@ public class cartPage extends CycledView {
           cartArrayString = BookSearchUtilities.readCart(mainMenuPage.welcomeName.getText().substring(8));
           
     	  resultsPane.getChildren().clear();
+    	  int sizeBeforeRemove = cartArrayString.size();
     	  
-	ArrayList<Integer> toBeRemoved = new ArrayList<Integer>();
-	for (int i = 0; i < CheckBoxArray.size(); i++) {
+	for (int i = CheckBoxArray.size() - 1; i >=0; i--) {
 		if (CheckBoxArray.get(i).isSelected()) {
-			toBeRemoved.add(i);
+			try {
+				BookSearchUtilities.setAvailability(Integer.parseInt(cartArrayString.get(i)), 0);
+			} catch (NumberFormatException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			cartArrayString.remove(i);
 		}
-	}
-	for (int i = toBeRemoved.size() - 1; i>=0; i--) {
-		cartArrayString.remove(i);
 	}
 	try {
 		Files.delete(Paths.get("Carts/" + mainMenuPage.welcomeName.getText().substring(8) + "Cart.txt"));
@@ -762,9 +771,9 @@ public class cartPage extends CycledView {
           cartArrayString = BookSearchUtilities.readCart(mainMenuPage.welcomeName.getText().substring(8));
           
     	  resultsPane.getChildren().clear();
+    	  int sizeBeforeRemove = cartArrayString.size();
     	  
-	ArrayList<Integer> toBeRemoved = new ArrayList<Integer>();
-	for (int i = 0; i < CheckBoxArray.size(); i++) {
+	for (int i = CheckBoxArray.size() - 1; i >=0; i--) {
 		if (CheckBoxArray.get(i).isSelected()) {
 			try {
 				BookSearchUtilities.setAvailability(Integer.parseInt(cartArrayString.get(i)), 0);
@@ -772,17 +781,16 @@ public class cartPage extends CycledView {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			toBeRemoved.add(i);
+			cartArrayString.remove(i);
 		}
 	}
-	if (toBeRemoved.size() == 0) {
+	int sizeAfterRemove = cartArrayString.size();
+	if (sizeAfterRemove == sizeBeforeRemove) {
     	  getChildren().remove(Warning1);
 			getChildren().add(Warning1);
 			return;
       }
-	for (int i = toBeRemoved.size() - 1; i>=0; i--) {
-		cartArrayString.remove(i);
-	}
+	
 	try {
 		Files.delete(Paths.get("Carts/" + mainMenuPage.welcomeName.getText().substring(8) + "Cart.txt"));
 		System.out.println("file deleted successfully");
